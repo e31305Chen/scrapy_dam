@@ -9,6 +9,11 @@ import scrapy
 
 
 class DamItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+    RS_ID = scrapy.Field()
+    R_ID = scrapy.Field()
+    Reservoir = scrapy.Field()
+    TimeStamp = scrapy.Field()
+    WaterLevel = scrapy.Field()
+    EffectiveWaterStorageCapacity = scrapy.Field()
+    PercentageUsedInReservoirCapacity = scrapy.Field()
+    MaximumCapacity = scrapy.Field()
