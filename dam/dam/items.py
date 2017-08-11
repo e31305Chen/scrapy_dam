@@ -9,7 +9,6 @@ import scrapy
 
 
 class DamItem(scrapy.Item):
-    RS_ID = scrapy.Field()
     R_ID = scrapy.Field()
     Reservoir = scrapy.Field()
     TimeStamp = scrapy.Field()

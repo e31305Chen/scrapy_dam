@@ -21,12 +21,17 @@ sudo dpkg -i mysql-apt-config_0.8.0-1_all.deb  #enter & select preferable versio
 sudo apt-get update
 sudo apt-get install mysql-server
 rm mysql-apt-config_0.8.0-1_all.deb 
+mysql_upgrade -u root -p
 
 //mysql -u root -p//
 SELECT USER, HOST, PASSWORD from mysql.user;
+mysql -u root -p'root1234' -e "SELECT * FROM demo.ReservoirState"
+SELECT * FROM demo.ReservoirState;
+SELECT * FROM demo.RegionalWaterRegime;
 
 check list
 -damwra OK
     scrapy crawl damwra -o dam.json 
-
--DataBase
+    - need 批次scrapy
+-RegionalWaterRegime OK
+-DataBase OK
