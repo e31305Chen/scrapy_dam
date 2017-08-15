@@ -22,25 +22,55 @@ class DamPipeline(object):
     
     
     def __init__(self):
-        dispatcher.connect(self.spider_opened, signals.spider_opened)
-        dispatcher.connect(self.spider_closed, signals.spider_closed)
-        self.files = {}
+        if(os.path.isfile('/home/ubuntu/workspace/scrapy_dam/dam/damwra_items1.json') and os.path.isfile('/home/ubuntu/workspace/scrapy_dam/dam/damwra_items2.json')):
+            print('File exist!!')
+        else:
+            dispatcher.connect(self.spider_opened, signals.spider_opened)
+            dispatcher.connect(self.spider_closed, signals.spider_closed)
+            self.files = {}
 
     def spider_opened(self, spider):
-        file = open('%s_items1.json' % spider.name, 'w+b')
-        self.files[spider] = file
-        self.exporter = JsonItemExporter(file)
-        self.exporter.start_exporting()
+        
+        # For checking usage
+        if(os.path.isfile('/home/ubuntu/workspace/scrapy_dam/dam/check_item1.txt')):
+            if(os.path.isfile('/home/ubuntu/workspace/scrapy_dam/dam/check_item2.txt')):
+                print('file exist')
+            else:
+                file = open('%s_items2.json' % spider.name, 'w+b')
+                self.files[spider] = file
+                self.exporter = JsonItemExporter(file)
+                self.exporter.start_exporting()
+        else:
+            file = open('%s_items1.json' % spider.name, 'w+b')
+            self.files[spider] = file
+            self.exporter = JsonItemExporter(file)
+            self.exporter.start_exporting()
 
     def spider_closed(self, spider):
-        self.exporter.finish_exporting()
-        file = self.files.pop(spider)
-        file.close()
+        if(os.path.isfile('/home/ubuntu/workspace/scrapy_dam/dam/check_item1.txt') and os.path.isfile('/home/ubuntu/workspace/scrapy_dam/dam/check_item2.txt')):
+            print('File exist!!')
+        else:
+            self.exporter.finish_exporting()
+            file = self.files.pop(spider)
+            file.close()
+            
+        if(os.path.isfile('/home/ubuntu/workspace/scrapy_dam/dam/damwra_items1.json')):
+            file = open('check_item1.txt', 'w')
+            file.write("This is for scrapy to check item accuracy")
+            file.close()
+        
+        if(os.path.isfile('/home/ubuntu/workspace/scrapy_dam/dam/damwra_items2.json')):
+            file = open('check_item2.txt', 'w')
+            file.write("This is for scrapy to check item accuracy")
+            file.close()
 
     def process_item(self, item, spider):
-        self.exporter.export_item(item)
-        return item
-    
+        if(os.path.isfile('/home/ubuntu/workspace/scrapy_dam/dam/check_item1.txt') and os.path.isfile('/home/ubuntu/workspace/scrapy_dam/dam/check_item2.txt')):
+            print('File exist!!')
+        else:
+            self.exporter.export_item(item)
+            return item
+        
     
     
     

@@ -5,12 +5,13 @@ import os
 import csv
 import MySQLdb
 from config import *
+from collections import OrderedDict
 
 def help():
     print('  USAGE: valid command list as followed')
     print('  create_demodb_and_demouser ')
-    print('  create_table_stations ')
-    print('  drop_table_stations ')
+    print('  create_table ')
+    print('  drop_table ')
     print('  setup')
 
 def root_connect():
@@ -70,14 +71,47 @@ def create_table(table):
     try:
         cursor.execute(table_ex)
     except:
-        t = "WARNING: "+table+ "might already exist"
-        print()
+        t = "WARNING: You might haven't created the FK table."
+        print(t)
         cursor.close()
         conn.close()
         sys.exit()
     cursor.close()
     conn.close()
     t = "Table "+table+" has been created..."
+    print(t)
+    
+def drop_all_tables():
+    conn = dbuser_connect()
+    cursor = conn.cursor()
+    for i in reversed(range(len(MYSQL_TABLE_LIST))):
+        table=MYSQL_TABLE_LIST[i]
+        sql = "DROP TABLE " + table + ";"
+        cursor.execute(sql)
+        t = "Table "+table+" has been dropped..."
+        print(t)
+    cursor.close()
+    conn.close()
+    
+    
+def create_all_tables():
+    conn = dbuser_connect()
+    cursor = conn.cursor()
+    for i in range(len(MYSQL_TABLE_LIST)):
+        table=MYSQL_TABLE_LIST[i]
+        table_ex = MYSQL_TABLE[table]
+        try:
+            cursor.execute(table_ex)
+            print(table) 
+        except:
+            t = "WARNING: You might haven't created the FK table."
+            print(t)
+            cursor.close()
+            conn.close()
+            sys.exit()
+    cursor.close()
+    conn.close()
+    t = "All tables have been created...Good!"
     print(t)
 
 def drop_table(table):
@@ -101,15 +135,17 @@ if __name__ == '__main__':
     if len(sys.argv) == 2 and sys.argv[1] in ["create_demodb_and_demouser",
                                             "setup",
                                             "show_table",
-                                            "seidm"]:
+                                            "seidm",
+                                            "drop_all_tables",
+                                            "create_all_tables"]:
         f = globals()[sys.argv[1]]
         f()
     elif len(sys.argv) == 2 and sys.argv[1] in ["create_table", 
                                                 "drop_table"]:
         print('Enter the table name.')
-        print('ReservoirState')
-        print('RegionalWaterRegime')
-        
+        for i in range(len(MYSQL_TABLE_LIST)):
+            print(MYSQL_TABLE_LIST[i])
+
     elif len(sys.argv) == 3 and sys.argv[1] in ["create_table", 
                                                 "drop_table"]:
         f = globals()[sys.argv[1]]

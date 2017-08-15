@@ -1,1 +1,0 @@
-This is for scrapy pipeline to check the json file is exist or not.
