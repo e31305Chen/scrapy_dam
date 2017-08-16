@@ -9,7 +9,13 @@ import time
 import json
 
 def run_scrapy():
+    if(os.path.isfile('damwra_items1.json') and os.path.isfile('damwra_items2.json')):
+        os.remove('damwra_items1.json')
+        os.remove('damwra_items2.json')
+        os.remove('check_item1.txt')
+        os.remove('check_item2.txt')
     os.system("scrapy crawl damwra")
+    print("Please wait.....")
     time.sleep(5)
     os.system("scrapy crawl damwra")
 
@@ -25,7 +31,7 @@ def ordered(obj):
 def convert2list(string):
     s = open(string,"r")
     s_list = s.read().splitlines()
-    l = len(s_list)-1
+    l = len(s_list)
     object_list = []
     for i in range(0,l,1):
         object_list.append(json.loads(s_list[i]))
@@ -40,24 +46,21 @@ try:
 except:
     print("Can't Connect Database via demouser: ", sys.exc_info()[0])
     sys.exit()
-    
+
 cursor = conn.cursor() 
-# myDict = {'EffectiveWaterStorageCapacity': 17154.58,
-#  'MaximumCapacity': '20134.00',
-#  'PercentageUsedInReservoirCapacity': '31.2',
-#  'R_ID': 1,
-#  'TimeStamp': '2017-08-14',
-#  'WaterLevel': 999}
 
-run_scrapy()
+#run_scrapy()
 
-dict_item1 = convert2list("/home/ubuntu/workspace/scrapy_dam/dam/damwra_items1.json")
-dict_item2 = convert2list("/home/ubuntu/workspace/scrapy_dam/dam/damwra_items2.json")
+
 
 for t in range(1,5,1):
-    if(ordered(dict_item1) == ordered(dict_item1)):
-        l = len(dict_item1)-1
-        print(l)
+    dict_item1 = convert2list("/home/ubuntu/workspace/scrapy_dam/dam/damwra_items1.json")
+    dict_item2 = convert2list("/home/ubuntu/workspace/scrapy_dam/dam/damwra_items2.json")
+    
+    if(ordered(dict_item1) == ordered(dict_item2)):
+        l = len(dict_item1)
+        #print(l)
+        #print(dict_item1)
         for i in range(0,l,1):
             myDict = dict_item1[i]
             # Insert object to mysql 
@@ -65,17 +68,16 @@ for t in range(1,5,1):
             values = '\"' + '\",\"'.join(map(str, a)) + '\"'
             column_name = ', '.join(myDict.keys())
             sql = "INSERT INTO %s ( %s ) VALUES ( %s );" % ("ReservoirState", column_name, values)
-            print(sql)
+            print(i+1,". ",values)
             cursor.execute(sql)
             conn.commit()
             
         print("File comparison pass and has been insert into DB table ReservoirState!")
         break
     else:
-        print("comparison is fail. Try "+t+" times")
+        print("comparison is fail. Try ",t," times")
+        time.sleep(5)
         run_scrapy()
-
-
 
 # Close DB link
 cursor.close()
