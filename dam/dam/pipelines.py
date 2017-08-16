@@ -16,7 +16,7 @@ from dam.spiders.damwra import DamwraSpider
 
 from scrapy.xlib.pydispatch import dispatcher
 from scrapy import signals
-from scrapy.contrib.exporter import JsonItemExporter
+from scrapy.contrib.exporter import JsonLinesItemExporter
 
 class DamPipeline(object):
     
@@ -38,12 +38,12 @@ class DamPipeline(object):
             else:
                 file = open('%s_items2.json' % spider.name, 'w+b')
                 self.files[spider] = file
-                self.exporter = JsonItemExporter(file)
+                self.exporter = JsonLinesItemExporter(file)
                 self.exporter.start_exporting()
         else:
             file = open('%s_items1.json' % spider.name, 'w+b')
             self.files[spider] = file
-            self.exporter = JsonItemExporter(file)
+            self.exporter = JsonLinesItemExporter(file)
             self.exporter.start_exporting()
 
     def spider_closed(self, spider):
