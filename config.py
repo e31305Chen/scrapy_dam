@@ -14,7 +14,12 @@ MYSQL_CONFIG = {
     'charset': 'utf8'
 }
 
-MYSQL_TABLE_LIST=['Location','City','Reservoir','WaterSupply','FlowObservatory','Forecast','IrrigationArea','ReservoirState','RegionalWaterRegime','Q90','Q95','NextReservoirLights','NextWeekP','RuleCurve','SimReservoirFlow','WaterIntakeStructures','ForecastingTime','Light','PreWaterLevel','PreWaterStorageCapacity']
+MYSQL_TABLE_LIST=['Location','City','Reservoir','WaterSupply',
+                    'FlowObservatory','Forecast','IrrigationArea',
+                    'ReservoirState','RegionalWaterRegime','Q90','Q95',
+                    'NextReservoirLights','NextWeekP','RuleCurve','SimReservoirFlow',
+                    'WaterIntakeStructures','ForecastingTime','Light','PreWaterLevel',
+                    'PreWaterStorageCapacity','PeoplesLivelihoodWater','IrrigationWaterDemand']
 
 
 MYSQL_TABLE = {
@@ -27,9 +32,6 @@ MYSQL_TABLE = {
                 C_ID                 int not null auto_increment,
                 CityName             varchar(10) NOT NULL,
                 L_ID                 int,
-                PeoplesLivelihoodWater float,
-                IndustrialWater   float default NULL,
-                IrrigationWaterDemand float,
                 primary key (C_ID),
                 FOREIGN KEY (L_ID) REFERENCES Location (L_ID)
                 )ENGINE=InnoDB""",
@@ -298,7 +300,91 @@ MYSQL_TABLE = {
                 primary key (PWSC_ID),
                 foreign key (R_ID) references Reservoir (R_ID),
                 FOREIGN KEY (FT_ID) REFERENCES ForecastingTime (FT_ID)
-                )ENGINE=InnoDB"""
-
-
+                )ENGINE=InnoDB""",
+                
+    'PeoplesLivelihoodWater':"""CREATE TABLE IF NOT EXISTS PeoplesLivelihoodWater (
+                    PLW_ID               int not null auto_increment,
+                    R_ID                 int,
+                    PeoplesLivelihoodWater_1 float,
+                    PeoplesLivelihoodWater_2 float,
+                    PeoplesLivelihoodWater_3 float,
+                    PeoplesLivelihoodWater_4 float,
+                    PeoplesLivelihoodWater_5 float,
+                    PeoplesLivelihoodWater_6 float,
+                    PeoplesLivelihoodWater_7 float,
+                    PeoplesLivelihoodWater_8 float,
+                    PeoplesLivelihoodWater_9 float,
+                    PeoplesLivelihoodWater_10 float,
+                    PeoplesLivelihoodWater_11 float,
+                    PeoplesLivelihoodWater_12 float,
+                    PeoplesLivelihoodWater_13 float,
+                    PeoplesLivelihoodWater_14 float,
+                    PeoplesLivelihoodWater_15 float,
+                    PeoplesLivelihoodWater_16 float,
+                    PeoplesLivelihoodWater_17 float,
+                    PeoplesLivelihoodWater_18 float,
+                    PeoplesLivelihoodWater_19 float,
+                    PeoplesLivelihoodWater_20 float,
+                    PeoplesLivelihoodWater_21 float,
+                    PeoplesLivelihoodWater_22 float,
+                    PeoplesLivelihoodWater_23 float,
+                    PeoplesLivelihoodWater_24 float,
+                    PeoplesLivelihoodWater_25 float,
+                    PeoplesLivelihoodWater_26 float,
+                    PeoplesLivelihoodWater_27 float,
+                    PeoplesLivelihoodWater_28 float,
+                    PeoplesLivelihoodWater_29 float,
+                    PeoplesLivelihoodWater_30 float,
+                    PeoplesLivelihoodWater_31 float,
+                    PeoplesLivelihoodWater_32 float,
+                    PeoplesLivelihoodWater_33 float,
+                    PeoplesLivelihoodWater_34 float,
+                    PeoplesLivelihoodWater_35 float,
+                    PeoplesLivelihoodWater_36 float,
+                    primary key (PLW_ID),
+                    FOREIGN KEY (R_ID) references Reservoir (R_ID)
+                    )ENGINE=InnoDB""",
+    
+    'IrrigationWaterDemand':"""CREATE TABLE IF NOT EXISTS IrrigationWaterDemand(
+                    IWD_ID               int not null auto_increment,
+                    R_ID                 int,
+                    IrrigationWaterDemand_1 float,
+                    IrrigationWaterDemand_2 float,
+                    IrrigationWaterDemand_3 float,
+                    IrrigationWaterDemand_4 float,
+                    IrrigationWaterDemand_5 float,
+                    IrrigationWaterDemand_6 float,
+                    IrrigationWaterDemand_7 float,
+                    IrrigationWaterDemand_8 float,
+                    IrrigationWaterDemand_9 float,
+                    IrrigationWaterDemand_10 float,
+                    IrrigationWaterDemand_11 float,
+                    IrrigationWaterDemand_12 float,
+                    IrrigationWaterDemand_13 float,
+                    IrrigationWaterDemand_14 float,
+                    IrrigationWaterDemand_15 float,
+                    IrrigationWaterDemand_16 float,
+                    IrrigationWaterDemand_17 float,
+                    IrrigationWaterDemand_18 float,
+                    IrrigationWaterDemand_19 float,
+                    IrrigationWaterDemand_20 float,
+                    IrrigationWaterDemand_21 float,
+                    IrrigationWaterDemand_22 float,
+                    IrrigationWaterDemand_23 float,
+                    IrrigationWaterDemand_24 float,
+                    IrrigationWaterDemand_25 float,
+                    IrrigationWaterDemand_26 float,
+                    IrrigationWaterDemand_27 float,
+                    IrrigationWaterDemand_28 float,
+                    IrrigationWaterDemand_29 float,
+                    IrrigationWaterDemand_30 float,
+                    IrrigationWaterDemand_31 float,
+                    IrrigationWaterDemand_32 float,
+                    IrrigationWaterDemand_33 float,
+                    IrrigationWaterDemand_34 float,
+                    IrrigationWaterDemand_35 float,
+                    IrrigationWaterDemand_36 float,
+                    primary key (IWD_ID),
+                    FOREIGN KEY (R_ID) references Reservoir (R_ID)
+                    )ENGINE=InnoDB"""
 }

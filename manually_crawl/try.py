@@ -22,30 +22,30 @@ import sys
 #     else:
 #         return("unknown")
         
-try:
-    conn = MySQLdb.connect(host='localhost',
-                            user='demouser',
-                            passwd='demo1234',
-                            db='demo',
-                            charset='utf8')
-except:
-    print("Can't Connect Database via demouser: ", sys.exc_info()[0])
-    sys.exit()
+# try:
+#     conn = MySQLdb.connect(host='localhost',
+#                             user='demouser',
+#                             passwd='demo1234',
+#                             db='demo',
+#                             charset='utf8')
+# except:
+#     print("Can't Connect Database via demouser: ", sys.exc_info()[0])
+#     sys.exit()
     
-cursor = conn.cursor() 
-myDict = {'EffectiveWaterStorageCapacity': 17154.58,
- 'MaximumCapacity': '20134.00',
- 'PercentageUsedInReservoirCapacity': '31.2',
- 'R_ID': 1,
- 'TimeStamp': '2017-08-14',
- 'WaterLevel': 999}
+# cursor = conn.cursor() 
+# myDict = {'EffectiveWaterStorageCapacity': 17154.58,
+#  'MaximumCapacity': '20134.00',
+#  'PercentageUsedInReservoirCapacity': '31.2',
+#  'R_ID': 1,
+#  'TimeStamp': '2017-08-14',
+#  'WaterLevel': 999}
 
-a =  list(myDict.values())
-placeholders = '\"' + '\",\"'.join(map(str, a)) + '\"'
-columns = ', '.join(myDict.keys())
-sql = "INSERT INTO %s ( %s ) VALUES ( %s );" % ("ReservoirState", columns, placeholders)
-print(sql)
-cursor.execute(sql)
+# a =  list(myDict.values())
+# placeholders = '\"' + '\",\"'.join(map(str, a)) + '\"'
+# columns = ', '.join(myDict.keys())
+# sql = "INSERT INTO %s ( %s ) VALUES ( %s );" % ("ReservoirState", columns, placeholders)
+# print(sql)
+# cursor.execute(sql)
 
 # qmarks = ', '.join('?' * len(myDict))
 # qry = "Insert Into ReservoirState (%s) Values (%s)" % (qmarks, qmarks)
@@ -61,5 +61,9 @@ cursor.execute(sql)
 # print(sql)
 # cursor.execute(sql)
 
-cursor.close()
-conn.close()
+# cursor.close()
+# conn.close()
+
+a = open("/home/ubuntu/workspace/scrapy_dam/dam/damwra_items1.json","r")
+k = a.read().splitlines()  #.replace("\'","")
+print(k)

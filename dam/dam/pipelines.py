@@ -19,7 +19,12 @@ from scrapy import signals
 from scrapy.contrib.exporter import JsonLinesItemExporter
 
 class DamPipeline(object):
-    
+    def check_item(self, item):
+        for key, val in item.items():
+            if re.match('^M', key) or re.match('^Percentage', key):   #挑出M開頭的key
+                if val and not re.match('^\d+?\.\d+?$', val): #???
+                    item[key] = -999  # can use None or NULL
+        return item
     
     def __init__(self):
         if(os.path.isfile('/home/ubuntu/workspace/scrapy_dam/dam/damwra_items1.json') and os.path.isfile('/home/ubuntu/workspace/scrapy_dam/dam/damwra_items2.json')):
@@ -65,6 +70,7 @@ class DamPipeline(object):
             file.close()
 
     def process_item(self, item, spider):
+        item = self.check_item(item)
         if(os.path.isfile('/home/ubuntu/workspace/scrapy_dam/dam/check_item1.txt') and os.path.isfile('/home/ubuntu/workspace/scrapy_dam/dam/check_item2.txt')):
             print('File exist!!')
         else:
