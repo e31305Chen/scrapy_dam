@@ -65,6 +65,7 @@ for t in range(1,5,1):
             column_name = ', '.join(myDict.keys())
             sql = "INSERT INTO %s ( %s ) VALUES ( %s );" % ("ReservoirState", column_name, values)
             print(i+1,". ",values)
+            print(sql)
             cursor.execute(sql)
             conn.commit()
             delet()
