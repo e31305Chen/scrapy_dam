@@ -3,9 +3,14 @@
 import json
 import urllib.request
 import sys
+import os
 import MySQLdb
 import MySQLdb.cursors
 from bs4 import BeautifulSoup
+sys.path.append("/home/ubuntu/workspace/scrapy_dam/")
+from dbhelper import dbuser_connect
+#sys.path.append("/home/ubuntu/workspace/scrapy_dam/dam/")
+#print (os.path.abspath("config.py"))
 
 # Light table
 def colorcheck(word):
@@ -44,18 +49,8 @@ except:
 
 end = len(data['DroughtWarning_OPENDATA'])
 
-# Connect to database
-try:
-    conn = MySQLdb.connect(host='localhost',
-                            user='demouser',
-                            passwd='demo1234',
-                            db='demo',
-                            charset='utf8')
-    print("Connect to mysql through demouser.")
-except:
-    print("Can't Connect Database via demouser: ", sys.exc_info()[0])
-    sys.exit()
-    
+#Link to DB by dbhelper.py
+conn = dbuser_connect()
 cursor = conn.cursor()  
 
 # Insert into Database 

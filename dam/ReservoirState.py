@@ -7,18 +7,24 @@ import sys
 import os
 import time
 import json
+sys.path.append("/home/ubuntu/workspace/scrapy_dam/")
+from dbhelper import dbuser_connect
 
 def run_scrapy():
+    delet()
+    os.system("scrapy crawl damwra")
+    print("Please wait.....")
+    for i in range(1,6,1):
+        time.sleep(1)
+        print(i)
+    os.system("scrapy crawl damwra")
+
+def delet():
     if(os.path.isfile('damwra_items1.json') and os.path.isfile('damwra_items2.json')):
         os.remove('damwra_items1.json')
         os.remove('damwra_items2.json')
         os.remove('check_item1.txt')
         os.remove('check_item2.txt')
-    os.system("scrapy crawl damwra")
-    print("Please wait.....")
-    time.sleep(5)
-    os.system("scrapy crawl damwra")
-
 #Compare two json file
 def ordered(obj):
     if isinstance(obj, dict):
@@ -37,22 +43,12 @@ def convert2list(string):
         object_list.append(json.loads(s_list[i]))
     return(object_list)
     
-try:
-    conn = MySQLdb.connect(host='localhost',
-                            user='demouser',
-                            passwd='demo1234',
-                            db='demo',
-                            charset='utf8')
-except:
-    print("Can't Connect Database via demouser: ", sys.exc_info()[0])
-    sys.exit()
-
+#Link to DB by dbhelper.py
+conn = dbuser_connect()
 cursor = conn.cursor() 
 
-#run_scrapy()
-
-
-
+#run crawl and compare the file then insert into DB
+run_scrapy()
 for t in range(1,5,1):
     dict_item1 = convert2list("/home/ubuntu/workspace/scrapy_dam/dam/damwra_items1.json")
     dict_item2 = convert2list("/home/ubuntu/workspace/scrapy_dam/dam/damwra_items2.json")
@@ -71,7 +67,7 @@ for t in range(1,5,1):
             print(i+1,". ",values)
             cursor.execute(sql)
             conn.commit()
-            
+            delet()
         print("File comparison pass and has been insert into DB table ReservoirState!")
         break
     else:
