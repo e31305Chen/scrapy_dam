@@ -11,7 +11,9 @@ def help():
     print('  USAGE: valid command list as followed')
     print('  create_demodb_and_demouser ')
     print('  create_table ')
+    print('  create_all_tables ')
     print('  drop_table ')
+    print('  drop_all_tables ')
     print('  setup')
 
 def root_connect():
@@ -82,16 +84,17 @@ def create_table(table):
     print(t)
     
 def drop_all_tables():
-    conn = dbuser_connect()
-    cursor = conn.cursor()
-    for i in reversed(range(len(MYSQL_TABLE_LIST))):
-        table=MYSQL_TABLE_LIST[i]
-        sql = "DROP TABLE " + table + ";"
-        cursor.execute(sql)
-        t = "Table "+table+" has been dropped..."
-        print(t)
-    cursor.close()
-    conn.close()
+    r_conn = root_connect()
+    r_cursor = r_conn.cursor()
+    sql = 'DROP DATABASE ' + MYSQL_CONFIG['db']+";"
+    r_cursor.execute(sql)
+    sql = 'DROP USER \"' + MYSQL_CONFIG['user'] + '\"@\"' + MYSQL_CONFIG['host'] + '\";'
+    r_cursor.execute(sql)
+    r_cursor.execute('FLUSH PRIVILEGES')
+    r_cursor.close()
+    r_conn.close()
+
+    create_demodb_and_demouser()
     
     
 def create_all_tables():

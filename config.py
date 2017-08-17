@@ -16,7 +16,7 @@ MYSQL_CONFIG = {
 
 MYSQL_TABLE_LIST=['Location','City','Reservoir','WaterSupply',
                     'FlowObservatory','Forecast','IrrigationArea',
-                    'ReservoirState','RegionalWaterRegime','Q90','Q95',
+                    'ReservoirState','ReservedWater', 'RegionalWaterRegime','Q90','Q95',
                     'NextReservoirLights','NextWeekP','RuleCurve','SimReservoirFlow',
                     'WaterIntakeStructures','ForecastingTime','Light','PreWaterLevel',
                     'PreWaterStorageCapacity','PeoplesLivelihoodWater','IrrigationWaterDemand']
@@ -39,7 +39,7 @@ MYSQL_TABLE = {
     'Reservoir':"""CREATE TABLE IF NOT EXISTS Reservoir (
                 R_ID                 int not null auto_increment,
                 ReservoirIdentifier  varchar(8) not null,
-                ReservoirName         varchar(10),
+                ReservoirName         varchar(30),
                 primary key (R_ID)
                 )ENGINE=InnoDB""",
     
@@ -90,8 +90,52 @@ MYSQL_TABLE = {
                 MaximumCapacity FLOAT(8,3) DEFAULT NULL,
                 FOREIGN KEY (R_ID) REFERENCES Reservoir (R_ID)
                 ) ENGINE=InnoDB""",
+    
+    'ReservedWater':"""CREATE TABLE IF NOT EXISTS ReservedWater (
+                RW_ID               int not null auto_increment,
+                R_ID                int,
+                ReservedWater_1                float,
+                ReservedWater_2                float,
+                ReservedWater_3                float,
+                ReservedWater_4                float,
+                ReservedWater_5                float,
+                ReservedWater_6                float,
+                ReservedWater_7                float,
+                ReservedWater_8                float,
+                ReservedWater_9                float,
+                ReservedWater_10               float,
+                ReservedWater_11               float,
+                ReservedWater_12               float,
+                ReservedWater_13               float,
+                ReservedWater_14               float,
+                ReservedWater_15               float,
+                ReservedWater_16               float,
+                ReservedWater_17               float,
+                ReservedWater_18               float,
+                ReservedWater_19               float,
+                ReservedWater_20               float,
+                ReservedWater_21               float,
+                ReservedWater_22               float,
+                ReservedWater_23               float,
+                ReservedWater_24               float,
+                ReservedWater_25               float,
+                ReservedWater_26               float,
+                ReservedWater_27               float,
+                ReservedWater_28               float,
+                ReservedWater_29               float,
+                ReservedWater_30               float,
+                ReservedWater_31               float,
+                ReservedWater_32               float,
+                ReservedWater_33               float,
+                ReservedWater_34               float,
+                ReservedWater_35               float,
+                ReservedWater_36               float,
+                primary key (RW_ID),
+                FOREIGN KEY (R_ID) REFERENCES Reservoir (R_ID)
+                )ENGINE=InnoDB""",
+                
     'RegionalWaterRegime': """CREATE TABLE IF NOT EXISTS RegionalWaterRegime (
-                RWR_ID INT(12) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                RWR_ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 C_ID int,
                 TimeStamp DATETIME NOT NULL,
                 ReservoirLightsNow CHAR(1) DEFAULT NULL,
