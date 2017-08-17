@@ -69,7 +69,7 @@ for t in range(1,5,1):
             cursor.execute(sql)
             conn.commit()
             delet()
-        print("File comparison pass and has been insert into DB table ReservoirState!")
+        print("Comparison pass and file has been insert into DB table ReservoirState!")
         break
     else:
         print("comparison is fail. Try ",t," times")

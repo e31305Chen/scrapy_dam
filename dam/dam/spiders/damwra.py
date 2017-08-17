@@ -34,9 +34,9 @@ class DamwraSpider(scrapy.Spider):
         for i in range(0,20,1):
             item['R_ID'] = "1"
             #item['Reservoir'] = res[0+12*i]
-            item['TimeStamp'] = res[2+12*i][36:46] 
-            item['WaterLevel'] = float(res[9+12*i].replace(',',''))
-            item['EffectiveWaterStorageCapacity'] = float(res[10+12*i].replace(',',''))
+            item['TimeStamp'] = res[8+12*i][0:10] 
+            item['WaterLevel'] = res[9+12*i].replace(',','')#float(res[9+12*i].replace(',',''))
+            item['EffectiveWaterStorageCapacity'] = res[10+12*i].replace(',','')#float(res[10+12*i].replace(',',''))
             item['PercentageUsedInReservoirCapacity'] = res[11+12*i].replace(',','').replace(' %','') #float(float_check_percent(res[11+12*i]))
             item['MaximumCapacity'] = res[1+12*i].replace(',','') #float_check(res[1+12*i])
             yield item

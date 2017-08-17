@@ -6,6 +6,8 @@ from bs4 import SoupStrainer
 from urllib.parse import unquote
 from urllib.parse import urlencode
 from dam.items import DamItem 
+import datetime
+import time
 
 class ReservoirpaststateSpider(scrapy.Spider):
     name = 'ReservoirPastState'
@@ -47,16 +49,25 @@ class ReservoirpaststateSpider(scrapy.Spider):
             only_td_tags = SoupStrainer("td")
             data=soup_post.find_all(only_td_tags)
             return(data)
+
+        #def check
         
-        res = PostResponse(2017,6,6,soup_get)
+        def dateRange(start, end, step=1, format="%Y-%m-%d"):
+            strptime, strftime = datetime.datetime.strptime, datetime.datetime.strftime
+            days = (strptime(end, format) - strptime(start, format)).days
+            return [strftime(strptime(start, format) + datetime.timedelta(i), format) for i in range(0, days, step)]
+            
+        date_list = dateRange("2016-01-01", time.strftime("%Y-%m-%d"))
+        
+        res = PostResponse(2005,1,1,soup_get)
         
         #print(res)
         for i in range(0,20,1):
             item['R_ID'] = "1"
             #item['Reservoir'] = res[0+12*i]
-            item['TimeStamp'] =  res[2+12*i].get_text()[36:46]  #str(res[2+12*i][36:46]) 
-            item['WaterLevel'] = float(res[8+12*i].get_text().replace(',',''))
-            item['EffectiveWaterStorageCapacity'] = float(res[9+12*i].get_text().replace(',',''))
-            item['PercentageUsedInReservoirCapacity'] = res[10+12*i].get_text().replace(',','').replace(' %','') #float(float_check_percent(res[11+12*i]))
-            item['MaximumCapacity'] = res[1+12*i].get_text().replace(',','') #float_check(res[1+12*i])
+            item['TimeStamp'] =  res[2+11*i].get_text()[36:46]  #str(res[2+12*i][36:46]) 
+            item['WaterLevel'] = res[8+11*i].get_text().replace(',','')#float(res[8+11*i].get_text().replace(',',''))
+            item['EffectiveWaterStorageCapacity'] = res[9+11*i].get_text().replace(',','')#float(res[9+11*i].get_text().replace(',',''))
+            item['PercentageUsedInReservoirCapacity'] = res[10+11*i].get_text().replace(',','').replace(' %','') #float(float_check_percent(res[11+12*i]))
+            item['MaximumCapacity'] = res[1+11*i].get_text().replace(',','') #float_check(res[1+12*i])
             yield item
