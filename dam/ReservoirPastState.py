@@ -17,12 +17,14 @@ from dbhelper import dbuser_connect
 #===========================================================================================================
 #Setting
 doublecheck = False  #It might take a great time and space the crawl the data. If not need it set to False!
-path = os.path.abspath("dir.txt").replace("dir.txt","") # To find the path
+keepfile = True  #See if you want to keep the original json file if yes we will rename it and keep it.
+nameoffile = "Saving_data.json" #The name of the renamed file.
+path = os.path.abspath("dir.txt").replace("dir.txt","") # To find the path.
 #===========================================================================================================
 
 def run_scrapy(dc):
     if(dc):
-        delet(dc)
+        delet()
         os.system("scrapy crawl ReservoirPastState")
         print("Please wait.....")
         for i in range(1,6,1):
@@ -30,21 +32,22 @@ def run_scrapy(dc):
             print(i)
         os.system("scrapy crawl ReservoirPastState")
     else:
-        delet(dc)
+        delet()
         os.system("scrapy crawl ReservoirPastState")
 
-def delet(dc):
-    if(dc):
-        if(os.path.isfile('ReservoirPastState_items1.json') and os.path.isfile('ReservoirPastState_items2.json')):
-            os.remove('ReservoirPastState_items1.json')
-            os.remove('ReservoirPastState_items2.json')
-            os.remove('check_item1.txt')
-            os.remove('check_item2.txt')
-    else:
-        if(os.path.isfile('ReservoirPastState_items1.json')):
-            os.remove('ReservoirPastState_items1.json')
-            os.remove('check_item1.txt')        
-
+def delet():
+    if(os.path.isfile('ReservoirPastState_items1.json')):
+        os.remove('ReservoirPastState_items1.json')
+        
+    if(os.path.isfile('ReservoirPastState_items2.json')):
+        os.remove('ReservoirPastState_items2.json')
+        
+    if(os.path.isfile('check_item1.txt')):
+        os.remove('check_item1.txt')
+        
+    if(os.path.isfile('check_item1.txt')):
+        os.remove('check_item2.txt')
+    
 #Compare two json file
 def ordered(obj):
     if isinstance(obj, dict):
@@ -78,8 +81,6 @@ for t in range(1,5,1):
     if(doublecheck):
         if(ordered(dict_item1) == ordered(dict_item2)):
             l = len(dict_item1)
-            #print(l)
-            #print(dict_item1)
             for i in range(0,l,1):
                 myDict = dict_item1[i]
                 # Insert object to mysql 
@@ -91,7 +92,10 @@ for t in range(1,5,1):
                 print(sql)
                 cursor.execute(sql)
                 conn.commit()
-                delet(doublecheck)
+            if(keepfile):
+                os.rename(path+"ReservoirPastState_items1.json", path+nameoffile)
+                print("The original json file is saving at: \n =>",path+nameoffile)
+            delet()
             print("Comparison pass and file has been insert into DB table ReservoirState!")
             break
         else:
@@ -99,6 +103,7 @@ for t in range(1,5,1):
             time.sleep(5)
             run_scrapy(doublecheck)
     else:
+        l = len(dict_item1)
         for i in range(0,l,1):
             myDict = dict_item1[i]
             # Insert object to mysql 
@@ -110,9 +115,13 @@ for t in range(1,5,1):
             print(sql)
             cursor.execute(sql)
             conn.commit()
-            delet(doublecheck)
+        if(keepfile):
+            os.rename(path+"ReservoirPastState_items1.json", path,"Saving_data/",time.strftime("%Y%m%d"),"_",nameoffile)
+            print("The original json file is saving at: \n =>",path,"Saving_data/",time.strftime("%Y%m%d"),"_",nameoffile)
+        delet()
         print("Comparison pass and file has been insert into DB table ReservoirState!")
-
+        break
+    
 # Close DB link
 cursor.close()
 conn.close()

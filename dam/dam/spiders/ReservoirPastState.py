@@ -57,7 +57,7 @@ class ReservoirpaststateSpider(scrapy.Spider):
             days = (strptime(end, format) - strptime(start, format)).days
             return [strftime(strptime(start, format) + datetime.timedelta(i), format) for i in range(0, days, step)]
             
-        date_list = dateRange("2017-01-01", time.strftime("%Y-%m-%d"))
+        date_list = dateRange("2017-07-01", time.strftime("%Y-%m-%d"))
         
         #Input all data into item 
         for d in date_list:

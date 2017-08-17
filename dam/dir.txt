@@ -1,0 +1,3 @@
+This is the file to locate other file.
+Do not rm it!
+Keep it with the file been created during scrapy process.
