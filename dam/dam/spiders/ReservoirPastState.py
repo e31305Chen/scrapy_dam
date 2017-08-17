@@ -16,12 +16,13 @@ class ReservoirpaststateSpider(scrapy.Spider):
 
     def parse(self, response):
         item = DamItem()
-        #res =  response.xpath('//table[@class="list nowrap"]/tr/td/text()').extract() 
-        #soup_get = BeautifulSoup(response, 'html.parser')
+        
+        #Get the info for post
         url = "http://fhy.wra.gov.tw/ReservoirPage_2011/StorageCapacity.aspx"
         html_get = urlopen(url).read()
         soup_get = BeautifulSoup(html_get, 'html.parser')
         
+        #Getting data from by post
         def PostResponse(year,month,date,soup_get):
             viewstate = soup_get.find("input", {"id": "__VIEWSTATE"}).attrs['value']
             viewstategenerator = soup_get.find("input", {"id": "__VIEWSTATEGENERATOR"}).attrs['value']
@@ -50,24 +51,41 @@ class ReservoirpaststateSpider(scrapy.Spider):
             data=soup_post.find_all(only_td_tags)
             return(data)
 
-        #def check
-        
+        #Generate a list of date
         def dateRange(start, end, step=1, format="%Y-%m-%d"):
             strptime, strftime = datetime.datetime.strptime, datetime.datetime.strftime
             days = (strptime(end, format) - strptime(start, format)).days
             return [strftime(strptime(start, format) + datetime.timedelta(i), format) for i in range(0, days, step)]
             
-        date_list = dateRange("2016-01-01", time.strftime("%Y-%m-%d"))
+        date_list = dateRange("2017-01-01", time.strftime("%Y-%m-%d"))
         
-        res = PostResponse(2005,1,1,soup_get)
+        #Input all data into item 
+        for d in date_list:
+            da = d.split("-")  # tpye is a list of str
+            res = PostResponse(int(da[0]),int(da[1]),int(da[2]),soup_get)
+            for i in range(0,20,1):
+                item['R_ID'] = "1"
+                #item['Reservoir'] = res[0+12*i]
+                item['TimeStamp'] =  res[2+11*i].get_text()[36:46]  #bs4
+                item['WaterLevel'] = res[8+11*i].get_text().replace(',','')
+                item['EffectiveWaterStorageCapacity'] = res[9+11*i].get_text().replace(',','')
+                item['PercentageUsedInReservoirCapacity'] = res[10+11*i].get_text().replace(',','').replace(' %','') 
+                item['MaximumCapacity'] = res[1+11*i].get_text().replace(',','') 
+                yield item
         
+        
+        
+#===============================================================================================        
+        #Example code for just one specific date
+        
+        #res = PostResponse(2005,1,1,soup_get)
         #print(res)
-        for i in range(0,20,1):
-            item['R_ID'] = "1"
-            #item['Reservoir'] = res[0+12*i]
-            item['TimeStamp'] =  res[2+11*i].get_text()[36:46]  #str(res[2+12*i][36:46]) 
-            item['WaterLevel'] = res[8+11*i].get_text().replace(',','')#float(res[8+11*i].get_text().replace(',',''))
-            item['EffectiveWaterStorageCapacity'] = res[9+11*i].get_text().replace(',','')#float(res[9+11*i].get_text().replace(',',''))
-            item['PercentageUsedInReservoirCapacity'] = res[10+11*i].get_text().replace(',','').replace(' %','') #float(float_check_percent(res[11+12*i]))
-            item['MaximumCapacity'] = res[1+11*i].get_text().replace(',','') #float_check(res[1+12*i])
-            yield item
+        # for i in range(0,20,1):
+        #     item['R_ID'] = "1"
+        #     #item['Reservoir'] = res[0+12*i]
+        #     item['TimeStamp'] =  res[2+11*i].get_text()[36:46]  #str(res[2+12*i][36:46]) 
+        #     item['WaterLevel'] = res[8+11*i].get_text().replace(',','')#float(res[8+11*i].get_text().replace(',',''))
+        #     item['EffectiveWaterStorageCapacity'] = res[9+11*i].get_text().replace(',','')#float(res[9+11*i].get_text().replace(',',''))
+        #     item['PercentageUsedInReservoirCapacity'] = res[10+11*i].get_text().replace(',','').replace(' %','') #float(float_check_percent(res[11+12*i]))
+        #     item['MaximumCapacity'] = res[1+11*i].get_text().replace(',','') #float_check(res[1+12*i])
+        #     yield item

@@ -7,8 +7,15 @@ import sys
 import os
 import time
 import json
+#path = os.path.abspath("dbhelper.py").replace("dbhelper.py","")
+#sys.path.append(path)
+
+# C9 has some problem with dbhelper.py path so later you can use codes above!
 sys.path.append("/home/ubuntu/workspace/scrapy_dam/")
 from dbhelper import dbuser_connect
+
+#Setting
+path = os.path.abspath("dir.txt").replace("dir.txt","") # To find the path
 
 def run_scrapy():
     delet()
@@ -49,9 +56,10 @@ cursor = conn.cursor()
 
 #run crawl and compare the file then insert into DB
 run_scrapy()
+
 for t in range(1,5,1):
-    dict_item1 = convert2list("/home/ubuntu/workspace/scrapy_dam/dam/damwra_items1.json")
-    dict_item2 = convert2list("/home/ubuntu/workspace/scrapy_dam/dam/damwra_items2.json")
+    dict_item1 = convert2list(path+"damwra_items1.json")
+    dict_item2 = convert2list(path+"damwra_items2.json")
     
     if(ordered(dict_item1) == ordered(dict_item2)):
         l = len(dict_item1)

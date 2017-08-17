@@ -8,7 +8,9 @@ import MySQLdb
 import MySQLdb.cursors
 import sys
 import os
-
+#path = os.path.abspath("dir.txt").replace("dir.txt","")
+path = os.path.abspath("dbhelper.py").replace("dbhelper.py","")
+print(path)
 # def colorcheck(word):
 #     if(word == "水情正常"):
 #         return('blue')
@@ -69,4 +71,4 @@ import os
 # k = a.read().splitlines()  #.replace("\'","")
 # print(k)
 
-os.system('/home/ubuntu/workspace/scrapy_dam/dam/ReservoirState.py')
+#os.system('/home/ubuntu/workspace/scrapy_dam/dam/ReservoirState.py')

@@ -21,8 +21,8 @@ from scrapy.contrib.exporter import JsonLinesItemExporter
 class DamPipeline(object):
     def check_item(self, item):
         for key, val in item.items():
-            if( re.match('^Max', key) or re.match('^Percentage', key) or re.match('^Water', key) or re.match('^Effective', key)):   #挑出M開頭的key 
-                if val and not re.match('^\d+?\.\d+?$', val): #???
+            if( re.match('^Max', key) or re.match('^Percentage', key) or re.match('^Water', key) or re.match('^Effective', key)):   #select key from item
+                if val and not re.match('^\d+?\.\d+?$', val): #check format
                     item[key] = -999  # can use None or NULL
             if re.match('^TimeStamp',key):
                 if val == "--\r\n      ":
@@ -30,7 +30,7 @@ class DamPipeline(object):
         return item
     
     def __init__(self):
-        path = os.path.abspath("dir.txt").replace("dir.txt","")
+        path = os.path.abspath("dir.txt").replace("dir.txt","") # To find the path
         print("Download file is set to be this path: ",path,"\nIf it's not right please make sure dir.txt file is at the same location of the execute file.py")
         
         if(os.path.isfile(path + "damwra_items1.json") and os.path.isfile(path + "damwra_items2.json")):

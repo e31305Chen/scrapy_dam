@@ -7,6 +7,10 @@ import os
 import MySQLdb
 import MySQLdb.cursors
 from bs4 import BeautifulSoup
+#path = os.path.abspath("dbhelper.py").replace("dbhelper.py","")
+#sys.path.append(path)
+
+# C9 has some problem with dbhelper.py path so later you can use codes above!
 sys.path.append("/home/ubuntu/workspace/scrapy_dam/")
 from dbhelper import dbuser_connect
 #sys.path.append("/home/ubuntu/workspace/scrapy_dam/dam/")
@@ -68,4 +72,4 @@ for i in range(0,end,1):
 cursor.close()
 conn.close()
 
-#Everything seems like no problem. Can get the data, however, cannot insert into table.
+

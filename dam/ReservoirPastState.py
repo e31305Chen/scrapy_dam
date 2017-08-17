@@ -7,32 +7,52 @@ import sys
 import os
 import time
 import json
+#path = os.path.abspath("dbhelper.py").replace("dbhelper.py","")
+#sys.path.append(path)
+
+# C9 has some problem with dbhelper.py path so later you can use codes above!
 sys.path.append("/home/ubuntu/workspace/scrapy_dam/")
 from dbhelper import dbuser_connect
 
-# def run_scrapy():
-#     delet()
-#     os.system("scrapy crawl damwra")
-#     print("Please wait.....")
-#     for i in range(1,6,1):
-#         time.sleep(1)
-#         print(i)
-#     os.system("scrapy crawl damwra")
+#===========================================================================================================
+#Setting
+doublecheck = False  #It might take a great time and space the crawl the data. If not need it set to False!
+path = os.path.abspath("dir.txt").replace("dir.txt","") # To find the path
+#===========================================================================================================
 
-# def delet():
-#     if(os.path.isfile('damwra_items1.json') and os.path.isfile('damwra_items2.json')):
-#         os.remove('damwra_items1.json')
-#         os.remove('damwra_items2.json')
-#         os.remove('check_item1.txt')
-#         os.remove('check_item2.txt')
-# #Compare two json file
-# def ordered(obj):
-#     if isinstance(obj, dict):
-#         return sorted((k, ordered(v)) for k, v in obj.items())
-#     if isinstance(obj, list):
-#         return sorted(ordered(x) for x in obj)
-#     else:
-#         return obj
+def run_scrapy(dc):
+    if(dc):
+        delet(dc)
+        os.system("scrapy crawl ReservoirPastState")
+        print("Please wait.....")
+        for i in range(1,6,1):
+            time.sleep(1)
+            print(i)
+        os.system("scrapy crawl ReservoirPastState")
+    else:
+        delet(dc)
+        os.system("scrapy crawl ReservoirPastState")
+
+def delet(dc):
+    if(dc):
+        if(os.path.isfile('ReservoirPastState_items1.json') and os.path.isfile('ReservoirPastState_items2.json')):
+            os.remove('ReservoirPastState_items1.json')
+            os.remove('ReservoirPastState_items2.json')
+            os.remove('check_item1.txt')
+            os.remove('check_item2.txt')
+    else:
+        if(os.path.isfile('ReservoirPastState_items1.json')):
+            os.remove('ReservoirPastState_items1.json')
+            os.remove('check_item1.txt')        
+
+#Compare two json file
+def ordered(obj):
+    if isinstance(obj, dict):
+        return sorted((k, ordered(v)) for k, v in obj.items())
+    if isinstance(obj, list):
+        return sorted(ordered(x) for x in obj)
+    else:
+        return obj
 
 def convert2list(string):
     s = open(string,"r")
@@ -48,36 +68,38 @@ conn = dbuser_connect()
 cursor = conn.cursor() 
 
 #run crawl and compare the file then insert into DB
-# run_scrapy()
-# for t in range(1,5,1):
-#     dict_item1 = convert2list("/home/ubuntu/workspace/scrapy_dam/dam/ReservoirPastState_items1.json")
-#     # dict_item2 = convert2list("/home/ubuntu/workspace/scrapy_dam/dam/damwra_items2.json")
+run_scrapy(doublecheck)
+
+for t in range(1,5,1):
+    dict_item1 = convert2list(path+"ReservoirPastState_items1.json")
+    if(doublecheck):
+        dict_item2 = convert2list(path+"ReservoirPastState_items2.json")
     
-#     if(ordered(dict_item1) == ordered(dict_item2)):
-#         l = len(dict_item1)
-#         #print(l)
-#         #print(dict_item1)
-#         for i in range(0,l,1):
-#             myDict = dict_item1[i]
-#             # Insert object to mysql 
-#             a =  list(myDict.values())
-#             values = '\"' + '\",\"'.join(map(str, a)) + '\"'
-#             column_name = ', '.join(myDict.keys())
-#             sql = "INSERT INTO %s ( %s ) VALUES ( %s );" % ("ReservoirState", column_name, values)
-#             print(i+1,". ",values)
-#             print(sql)
-#             cursor.execute(sql)
-#             conn.commit()
-#             delet()
-#         print("Comparison pass and file has been insert into DB table ReservoirState!")
-#         break
-#     else:
-#         print("comparison is fail. Try ",t," times")
-#         time.sleep(5)
-#         run_scrapy()
-dict_item1 = convert2list("/home/ubuntu/workspace/scrapy_dam/dam/ReservoirPastState_items1.json")
-l = len(dict_item1)
-for i in range(0,l,1):
+    if(doublecheck):
+        if(ordered(dict_item1) == ordered(dict_item2)):
+            l = len(dict_item1)
+            #print(l)
+            #print(dict_item1)
+            for i in range(0,l,1):
+                myDict = dict_item1[i]
+                # Insert object to mysql 
+                a =  list(myDict.values())
+                values = '\"' + '\",\"'.join(map(str, a)) + '\"'
+                column_name = ', '.join(myDict.keys())
+                sql = "INSERT INTO %s ( %s ) VALUES ( %s );" % ("ReservoirState", column_name, values)
+                print(i+1,". ",values)
+                print(sql)
+                cursor.execute(sql)
+                conn.commit()
+                delet(doublecheck)
+            print("Comparison pass and file has been insert into DB table ReservoirState!")
+            break
+        else:
+            print("comparison is fail. Try ",t," times")
+            time.sleep(5)
+            run_scrapy(doublecheck)
+    else:
+        for i in range(0,l,1):
             myDict = dict_item1[i]
             # Insert object to mysql 
             a =  list(myDict.values())
@@ -88,9 +110,14 @@ for i in range(0,l,1):
             print(sql)
             cursor.execute(sql)
             conn.commit()
-            #delet()
-            
-print("Comparison pass and file has been insert into DB table ReservoirState!")
+            delet(doublecheck)
+        print("Comparison pass and file has been insert into DB table ReservoirState!")
+
 # Close DB link
 cursor.close()
 conn.close()
+
+
+
+
+
