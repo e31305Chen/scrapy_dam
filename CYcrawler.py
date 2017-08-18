@@ -4,7 +4,7 @@
 import os
 import sys
 
-def change_working_path()
+def change_working_path():
     path = os.path.abspath("dir.txt").replace("dir.txt","")+"dam"  #Stupie C9 again see pwd you'll know why
     print("Make sure the executed files are under this dir.\n=>",path,"\nIf not, please check the dir.txt is in the right dir!")
     os.chdir(path)
