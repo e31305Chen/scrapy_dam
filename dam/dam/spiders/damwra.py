@@ -4,6 +4,7 @@ from dam.items import DamItem
 import sys
 sys.path.append("/home/ubuntu/workspace/scrapy_dam/")
 from dbhelper import dbuser_connect
+from config import *
 
 class DamwraSpider(scrapy.Spider):
     name = 'damwra'
@@ -19,9 +20,13 @@ class DamwraSpider(scrapy.Spider):
         def Reservoir_id(name):
             conn = dbuser_connect()
             cursor = conn.cursor() 
-            sql = "SELECT * FROM demo.Reservoir WHERE ReservoirName = \""+name+"\""
-            cursor.execute(sql)
-            row = cursor.fetchone()
+            sql = "SELECT * FROM "+MYSQL_CONFIG['db']+".Reservoir WHERE ReservoirName = \""+name+"\""
+            try:
+                cursor.execute(sql)
+                row = cursor.fetchone()
+            except:
+                print("Make the table Reservoir is not empty. You can create it by \"./CYcrawler.py Reservoir\"")
+                sys.exit()
             #print(type(row[0]))
             cursor.close()
             conn.close()
