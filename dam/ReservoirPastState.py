@@ -116,8 +116,10 @@ for t in range(1,5,1):
             cursor.execute(sql)
             conn.commit()
         if(keepfile):
-            os.rename(path+"ReservoirPastState_items1.json", path,"Saving_data/",time.strftime("%Y%m%d"),"_",nameoffile)
-            print("The original json file is saving at: \n =>",path,"Saving_data/",time.strftime("%Y%m%d"),"_",nameoffile)
+            a = path+"ReservoirPastState_items1.json"
+            b = path + "Saving_data/"+time.strftime("%Y%m%d")+"_"+nameoffile
+            os.rename(a, b)
+            print("The original json file is saving at: \n =>",b)
         delet()
         print("Comparison pass and file has been insert into DB table ReservoirState!")
         break

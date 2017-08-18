@@ -8,6 +8,9 @@ from urllib.parse import urlencode
 from dam.items import DamItem 
 import datetime
 import time
+import sys
+sys.path.append("/home/ubuntu/workspace/scrapy_dam/")
+from dbhelper import dbuser_connect
 
 class ReservoirpaststateSpider(scrapy.Spider):
     name = 'ReservoirPastState'
@@ -50,7 +53,19 @@ class ReservoirpaststateSpider(scrapy.Spider):
             only_td_tags = SoupStrainer("td")
             data=soup_post.find_all(only_td_tags)
             return(data)
-
+        
+        #Search in mysql
+        def Reservoir_id(name):
+            conn = dbuser_connect()
+            cursor = conn.cursor() 
+            sql = "SELECT * FROM demo.Reservoir WHERE ReservoirName = \""+name+"\""
+            cursor.execute(sql)
+            row = cursor.fetchone()
+            #print(type(row[0]))
+            cursor.close()
+            conn.close()
+            return(str(row[0]))
+            
         #Generate a list of date
         def dateRange(start, end, step=1, format="%Y-%m-%d"):
             strptime, strftime = datetime.datetime.strptime, datetime.datetime.strftime
@@ -64,7 +79,7 @@ class ReservoirpaststateSpider(scrapy.Spider):
             da = d.split("-")  # tpye is a list of str
             res = PostResponse(int(da[0]),int(da[1]),int(da[2]),soup_get)
             for i in range(0,20,1):
-                item['R_ID'] = "1"
+                item['R_ID'] = Reservoir_id(res[0+11*i].get_text())#"1"
                 #item['Reservoir'] = res[0+12*i]
                 item['TimeStamp'] =  res[2+11*i].get_text()[36:46]  #bs4
                 item['WaterLevel'] = res[8+11*i].get_text().replace(',','')
