@@ -3,11 +3,11 @@
 
 import os
 import sys
-#path = os.path.abspath("ReservoirState.py").replace("ReservoirState.py","")
-#os.system("."+path)
-#path = os.path.abspath("dbhelper.py").replace("dbhelper.py","")
-#sys.path.append(path)
-#os.system("./dam/ReservoirState.py") 可動但抓不到scrapy
+
+def change_working_path()
+    path = os.path.abspath("dir.txt").replace("dir.txt","")+"dam"  #Stupie C9 again see pwd you'll know why
+    print("Make sure the executed files are under this dir.\n=>",path,"\nIf not, please check the dir.txt is in the right dir!")
+    os.chdir(path)
 
 def help():
     print("======Run routinely=====")
@@ -21,15 +21,19 @@ def help():
     print("===Dev by CYLin===")
     
 def ReservoirState():
+    change_working_path()
     os.system("./ReservoirState.py")
     
 def ReservoirPastState():
+    change_working_path()
     os.system("./ReservoirPastState.py")
     
 def RegionalWaterRegime():
+    change_working_path()
     os.system("./RegionalWaterRegime.py")
     
 def Reservoir():
+    change_working_path()
     os.system("./Reservoir.py")
 
 def setup():
