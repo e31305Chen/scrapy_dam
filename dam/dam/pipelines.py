@@ -8,6 +8,7 @@ import MySQLdb
 import MySQLdb.cursors
 import re
 import os
+from datetime import datetime
 
 from scrapy.exceptions import DropItem
 import scrapy
@@ -20,8 +21,24 @@ from scrapy.contrib.exporter import JsonLinesItemExporter
 
 class DamPipeline(object):
     def check_item(self, item):
+        if (item['MaximumCapacity'] != "--"):
+            a = datetime.strptime(item['TimeStamp'], '%Y-%m-%d')
+            b = datetime.strptime("2017-01-01", '%Y-%m-%d')
+            if(a<b):
+                if(float(item['EffectiveWaterStorageCapacity']) > (float(item['MaximumCapacity'])*1.1)): #用1.1被去篩選，考慮到淤積因素
+                    item['EffectiveWaterStorageCapacity'] = -888
+            else:
+                if(float(item['EffectiveWaterStorageCapacity']) > float(item['MaximumCapacity'])): #2017年後只要大於就排除
+                    item['EffectiveWaterStorageCapacity'] = -888  
+        else:
+            if item['EffectiveWaterStorageCapacity'] and not re.match('^\d+?\.\d+?$', item['EffectiveWaterStorageCapacity']): #check format
+                item['EffectiveWaterStorageCapacity'] = -999
+            else:
+                if(float(item['EffectiveWaterStorageCapacity']) > 100000):
+                    item['EffectiveWaterStorageCapacity'] = -888
+        
         for key, val in item.items():
-            if( re.match('^Max', key) or re.match('^Percentage', key) or re.match('^Water', key) or re.match('^Effective', key)):   #select key from item
+            if( re.match('^Max', key) or re.match('^Percentage', key) or re.match('^Water', key) ):   #select key from item   or re.match('^Effective', key)
                 if val and not re.match('^\d+?\.\d+?$', val): #check format
                     item[key] = -999  # can use None or NULL
             if re.match('^TimeStamp',key):

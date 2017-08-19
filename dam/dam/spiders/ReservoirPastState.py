@@ -77,10 +77,15 @@ class ReservoirpaststateSpider(scrapy.Spider):
             days = (strptime(end, format) - strptime(start, format)).days
             return [strftime(strptime(start, format) + datetime.timedelta(i), format) for i in range(0, days, step)]
             
-        date_list = dateRange("2017-07-01", time.strftime("%Y-%m-%d"))
-        
+        date_list = dateRange("2005-01-01", time.strftime("%Y-%m-%d"))
+        #date_list = dateRange("2009-05-06", "2009-05-7")
+        w = 0
         #Input all data into item 
         for d in date_list:
+            w = w+1
+            if(w==5):
+                w = 0
+                time.sleep(1)
             da = d.split("-")  # tpye is a list of str
             res = PostResponse(int(da[0]),int(da[1]),int(da[2]),soup_get)
             for i in range(0,20,1):
