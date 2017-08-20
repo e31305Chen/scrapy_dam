@@ -20,7 +20,12 @@ doublecheck = False  #It might take a great time and space the crawl the data. I
 keepfile = True  #See if you want to keep the original json file if yes we will rename it and keep it.
 nameoffile = "Saving_data.json" #The name of the renamed file.
 path = os.path.abspath("dir.txt").replace("dir.txt","") # To find the path.
+openfilename = "ReservoirPastState_items1.json"
 #===========================================================================================================
+Run_scrapy = input("Do you want to run the scrapy?(or you already have the input file)[y/n]  ")  #No double check for "y"
+if(Run_scrapy == "n"):
+    openfilename = input("!!!!Make sure your input file is at the same dir as dir.txt!!!!\n("+path+")\nEnter your file name.( Default: ReservoirPastState_items1.json ):  ")
+    doublecheck = False
 
 def run_scrapy(dc):
     if(dc):
@@ -58,7 +63,11 @@ def ordered(obj):
         return obj
 
 def convert2list(string):
-    s = open(string,"r")
+    try:
+        s = open(string,"r")
+    except:
+        print("Cannot find and open the file under this directory:\n",string)
+        sys.exit()
     s_list = s.read().splitlines()
     l = len(s_list)
     object_list = []
@@ -71,10 +80,11 @@ conn = dbuser_connect()
 cursor = conn.cursor() 
 
 #run crawl and compare the file then insert into DB
-run_scrapy(doublecheck)
+if(Run_scrapy == "y"):
+    run_scrapy(doublecheck)
 
 for t in range(1,5,1):
-    dict_item1 = convert2list(path+"ReservoirPastState_items1.json")
+    dict_item1 = convert2list(path + openfilename)
     if(doublecheck):
         dict_item2 = convert2list(path+"ReservoirPastState_items2.json")
     
@@ -116,7 +126,7 @@ for t in range(1,5,1):
             cursor.execute(sql)
             conn.commit()
         if(keepfile):
-            a = path+"ReservoirPastState_items1.json"
+            a = path + openfilename
             b = path + "Saving_data/"+time.strftime("%Y%m%d")+"_"+nameoffile
             os.rename(a, b)
             print("The original json file is saving at: \n =>",b)

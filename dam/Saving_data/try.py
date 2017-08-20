@@ -8,27 +8,44 @@ import MySQLdb
 import MySQLdb.cursors
 import sys
 import os
+import json
 
-try:
-    conn = MySQLdb.connect(host='localhost',
-                            user='demouser',
-                            passwd='demo1234',
-                            db='demo',
-                            charset='utf8')
-except:
-    print("Can't Connect Database via demouser: ", sys.exc_info()[0])
-    sys.exit()
+# try:
+#     conn = MySQLdb.connect(host='localhost',
+#                             user='demouser',
+#                             passwd='demo1234',
+#                             db='demo',
+#                             charset='utf8')
+# except:
+#     print("Can't Connect Database via demouser: ", sys.exc_info()[0])
+#     sys.exit()
     
-cursor = conn.cursor() 
-cursor.execute("SELECT * FROM demo.Reservoir WHERE ReservoirName = \"阿公店水庫\"")
-row = cursor.fetchone()
-print(type(row[0]))
-# while row is not None:
-#   print(row)
-#   row = cursor.fetchone()
+# cursor = conn.cursor() 
+# cursor.execute("SELECT * FROM demo.Reservoir WHERE ReservoirName = \"阿公店水庫\"")
+# row = cursor.fetchone()
+# print(type(row[0]))
+# # while row is not None:
+# #   print(row)
+# #   row = cursor.fetchone()
 
-cursor.close()
-conn.close()
+# cursor.close()
+# conn.close()
+
+def convert2list(string):
+    s = open(string,"r")
+    s_list = s.read().splitlines()
+    l = len(s_list)
+    object_list = []
+    for i in range(0,l,1):
+        object_list.append(json.loads(s_list[i]))
+    return(object_list)
+    
+# dict_item1 = convert2list("/home/ubuntu/workspace/scrapy_dam/dam/Saving_data/"+"20170819_Saving_data.json")
+# l = len(dict_item1)
+# print(dict_item1[0],"\n",dict_item1[(l-1)])
+x = input("your name!")
+print(x)
+
 
 #path = os.path.abspath("dir.txt").replace("dir.txt","")
 # path = os.path.abspath("dbhelper.py").replace("dbhelper.py","")
