@@ -77,7 +77,10 @@ class ReservoirpaststateSpider(scrapy.Spider):
             days = (strptime(end, format) - strptime(start, format)).days
             return [strftime(strptime(start, format) + datetime.timedelta(i), format) for i in range(0, days, step)]
             
-        date_list = dateRange("2005-01-01", time.strftime("%Y-%m-%d"))
+        bd = input("Please enter the start crawling date (Default to be \"2005-1-1\")." )
+        if(bd == ""):
+            bd = "2005-1-1"
+        date_list = dateRange(bd, time.strftime("%Y-%m-%d"))  #"2005-01-01"
         #date_list = dateRange("2009-05-06", "2009-05-7")
         w = 0
         #Input all data into item 

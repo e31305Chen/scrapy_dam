@@ -14,8 +14,8 @@ import json
 sys.path.append("/home/ubuntu/workspace/scrapy_dam/")
 from dbhelper import dbuser_connect
 
-#===========================================================================================================
 #Setting
+#===========================================================================================================
 doublecheck = False  #It might take a great time and space the crawl the data. If not need it set to False!
 keepfile = True  #See if you want to keep the original json file if yes we will rename it and keep it.
 nameoffile = "Saving_data.json" #The name of the renamed file.
@@ -127,7 +127,7 @@ for t in range(1,5,1):
             conn.commit()
         if(keepfile):
             a = path + openfilename
-            b = path + "Saving_data/"+time.strftime("%Y%m%d")+"_"+nameoffile
+            b = path + "Saving_data/"+time.strftime("%Y%m%d %H%M")+"_"+nameoffile
             os.rename(a, b)
             print("The original json file is saving at: \n =>",b)
         delet()
