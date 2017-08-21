@@ -19,18 +19,24 @@ path = os.path.abspath("dir.txt").replace("dir.txt","") # To find the path
 
 def run_scrapy():
     delet()
-    os.system("scrapy crawl damwra")
+    os.system("scrapy crawl ReservoirState")
     print("Please wait.....")
     for i in range(1,6,1):
         time.sleep(1)
         print(i)
-    os.system("scrapy crawl damwra")
+    os.system("scrapy crawl ReservoirState")
 
 def delet():
-    if(os.path.isfile('damwra_items1.json') and os.path.isfile('damwra_items2.json')):
-        os.remove('damwra_items1.json')
-        os.remove('damwra_items2.json')
+    if(os.path.isfile('ReservoirState_items1.json')):
+        os.remove('ReservoirState_items1.json')
+        
+    if(os.path.isfile('ReservoirState_items2.json')):
+        os.remove('ReservoirState_items2.json')
+        
+    if(os.path.isfile('check_item1.txt')):
         os.remove('check_item1.txt')
+        
+    if(os.path.isfile('check_item1.txt')):
         os.remove('check_item2.txt')
 #Compare two json file
 def ordered(obj):
@@ -58,8 +64,8 @@ cursor = conn.cursor()
 run_scrapy()
 
 for t in range(1,5,1):
-    dict_item1 = convert2list(path+"damwra_items1.json")
-    dict_item2 = convert2list(path+"damwra_items2.json")
+    dict_item1 = convert2list(path+"ReservoirState_items1.json")
+    dict_item2 = convert2list(path+"ReservoirState_items2.json")
     
     if(ordered(dict_item1) == ordered(dict_item2)):
         l = len(dict_item1)

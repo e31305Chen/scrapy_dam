@@ -13,8 +13,8 @@ sys.path.append("/home/ubuntu/workspace/scrapy_dam/")
 from dbhelper import dbuser_connect
 from config import *
 
-class ReservoirpaststateSpider(scrapy.Spider):
-    name = 'ReservoirPastState'
+class ReservoirstatePySpider(scrapy.Spider):
+    name = 'ReservoirState'
     allowed_domains = ['fhy.wra.gov.tw']
     start_urls = ['http://fhy.wra.gov.tw/ReservoirPage_2011/StorageCapacity.aspx']
 
@@ -72,16 +72,17 @@ class ReservoirpaststateSpider(scrapy.Spider):
             return(str(row[0]))
             
         #Generate a list of date
-        def dateRange(start, end, step=1, format="%Y-%m-%d"):
-            strptime, strftime = datetime.datetime.strptime, datetime.datetime.strftime
-            days = (strptime(end, format) - strptime(start, format)).days
-            return [strftime(strptime(start, format) + datetime.timedelta(i), format) for i in range(0, days, step)]
+        # def dateRange(start, end, step=1, format="%Y-%m-%d"):
+        #     strptime, strftime = datetime.datetime.strptime, datetime.datetime.strftime
+        #     days = (strptime(end, format) - strptime(start, format)).days
+        #     return [strftime(strptime(start, format) + datetime.timedelta(i), format) for i in range(0, days, step)]
             
-        bd = input("Please enter the start crawling date (Default to be \"2005-1-1\")." )
-        if(bd == ""):
-            bd = "2005-1-1"
-        date_list = dateRange(bd, time.strftime("%Y-%m-%d"))  #"2005-01-01"
+        # bd = input("Please enter the start crawling date (Default to be \"2005-1-1\")." )
+        # if(bd == ""):
+        #     bd = "2005-1-1"
+        date_list = []#dateRange(bd, time.strftime("%Y-%m-%d"))  #"2005-01-01"
         #date_list = dateRange("2009-05-06", "2009-05-7")
+        date_list.append(time.strftime("%Y-%m-%d"))
         w = 0
         #Input all data into item 
         for d in date_list:
@@ -100,20 +101,3 @@ class ReservoirpaststateSpider(scrapy.Spider):
                 item['PercentageUsedInReservoirCapacity'] = res[10+11*i].get_text().replace(',','').replace(' %','') 
                 item['MaximumCapacity'] = res[1+11*i].get_text().replace(',','') 
                 yield item
-        
-        
-        
-#===============================================================================================        
-        #Example code for just one specific date
-        
-        #res = PostResponse(2005,1,1,soup_get)
-        #print(res)
-        # for i in range(0,20,1):
-        #     item['R_ID'] = "1"
-        #     #item['Reservoir'] = res[0+12*i]
-        #     item['TimeStamp'] =  res[2+11*i].get_text()[36:46]  #str(res[2+12*i][36:46]) 
-        #     item['WaterLevel'] = res[8+11*i].get_text().replace(',','')#float(res[8+11*i].get_text().replace(',',''))
-        #     item['EffectiveWaterStorageCapacity'] = res[9+11*i].get_text().replace(',','')#float(res[9+11*i].get_text().replace(',',''))
-        #     item['PercentageUsedInReservoirCapacity'] = res[10+11*i].get_text().replace(',','').replace(' %','') #float(float_check_percent(res[11+12*i]))
-        #     item['MaximumCapacity'] = res[1+11*i].get_text().replace(',','') #float_check(res[1+12*i])
-        #     yield item

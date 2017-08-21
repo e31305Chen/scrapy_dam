@@ -20,13 +20,17 @@ def help():
     print("setup")
     print("\n===Dev by CYLin===")
     
-def ReservoirState():
+def damwra():
     change_working_path()
     os.system("./ReservoirState.py")
     
 def ReservoirPastState():
     change_working_path()
     os.system("./ReservoirPastState.py")
+    
+def ReservoirState():
+    change_working_path()
+    os.system("./ReservoirState.py")
     
 # def start_date():
 #     bd = input("Please enter the start crawling date (Default to be \"2005-1-1\")." )

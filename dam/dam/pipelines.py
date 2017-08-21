@@ -20,7 +20,7 @@ from scrapy import signals
 from scrapy.contrib.exporter import JsonLinesItemExporter
 
 class DamPipeline(object):
-    def check_item(self, item):
+    def check_item(self,item):
         if (item['MaximumCapacity'] != "--"):
             a = datetime.strptime(item['TimeStamp'], '%Y-%m-%d')
             b = datetime.strptime("2017-01-01", '%Y-%m-%d')
@@ -50,8 +50,8 @@ class DamPipeline(object):
         path = os.path.abspath("dir.txt").replace("dir.txt","") # To find the path
         print("Download file is set to be this path: ",path,"\nIf it's not right please make sure dir.txt file is at the same location of the execute file.py")
         
-        if(os.path.isfile(path + "damwra_items1.json") and os.path.isfile(path + "damwra_items2.json")):
-            print('Err: damwra_items1.json & damwra_items2.json are already exist.')
+        if(os.path.isfile(path + "ReservoirState_items1.json") and os.path.isfile(path + "ReservoirState_items2.json")):
+            print('Err: ReservoirState_items1.json & ReservoirState_items2.json are already exist.')
         elif(os.path.isfile(path +'ReservoirPastState_items1.json') and os.path.isfile(path +'ReservoirPastState_items2.json')):
             print('Err: ReservoirPastState_items1.json & ReservoirPastState_items2.json are already exist.')
         else:
@@ -87,12 +87,12 @@ class DamPipeline(object):
             file = self.files.pop(spider)
             file.close()
             
-        if(os.path.isfile(path +'damwra_items1.json') or os.path.isfile(path +'ReservoirPastState_items1.json')):
+        if(os.path.isfile(path +'ReservoirState_items1.json') or os.path.isfile(path +'ReservoirPastState_items1.json')):
             file = open('check_item1.txt', 'w')
             file.write("This is for scrapy to check item accuracy")
             file.close()
         
-        if(os.path.isfile(path +'damwra_items2.json') or os.path.isfile(path +'ReservoirPastState_items2.json')):
+        if(os.path.isfile(path +'ReservoirState_items2.json') or os.path.isfile(path +'ReservoirPastState_items2.json')):
             file = open('check_item2.txt', 'w')
             file.write("This is for scrapy to check item accuracy")
             file.close()
